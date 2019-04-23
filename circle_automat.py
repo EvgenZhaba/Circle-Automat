@@ -8,19 +8,20 @@ import datetime
 WX = 128
 WY = 128
 
-def replace(nagval, x, y):
+def replace(nagval, x, y): # процедура создания стены
 	if (x<0) or (x>=WX) or (y<0) or (y>=WY):
 		return
 	value = nagval[x][y]
 	if value == 0:
 		nagval[x][y] = 2
 	elif value == 2:
-		nagval[x][y] = 0
+		nagval[x][y] = 0 # если стена есть, то убираем её
 
 def tick(tonal, nagval):
 	new_nagval = []
 	for i, n in enumerate(nagval):
 		way = n[2]
+		# направление 1 - вверх, 7 - вниз, 3 - налево, 5 - направо
 		dx = way % 3 - 1
 		dy = (way // 3) % 3 - 1
 		x = n[0]+dx
@@ -33,16 +34,16 @@ def tick(tonal, nagval):
 			if tonal[x][y] == 2: # если стена
 				replace(tonal, x+dx, y+dy) # перемещение стены визуальное
 				nagval[i][3] = 1 # столкновение
-				if dy == 0:
-					new_way = 7 if dx>0 else 1
-					replace(tonal, x, y-1)
-					replace(tonal, x, y+1)
+				if dy == 0: # вертикальные сигналы
+					new_way = 7 if dx>0 else 1 # направление нового сигнала
+					replace(tonal, x, y-1) # стены
+					replace(tonal, x, y+1) # если не создавать некоторые из них, то можно получить новые эффекты
 					new_nagval += [[x, y, new_way, 0, 0]] # новый сигнал
-				if False and dx == 0:
+				if False and dx == 0: # горизонтальные сигналы
 					new_way = 5 if dy>0 else 3
 					replace(tonal, x-1, y)
 					replace(tonal, x+1, y)
-					new_nagval += [[x, y, new_way, 0, 0]] # новый сигнал
+					new_nagval += [[x, y, new_way, 0, 0]] 
 				
 		else: # если столкнулись
 			dx *= -1
@@ -56,8 +57,8 @@ def tick(tonal, nagval):
 		tonal[n[0]][n[1]] = 0
 		nagval[i][0] += dx # перемещение точки логическое
 		nagval[i][1] += dy
-		nagval[i][4] += 1
-	if new_nagval:
+		nagval[i][4] += 1 # +1 к времени жизни
+	if new_nagval: 
 		nagval += new_nagval
 	
 	for i, n in enumerate(nagval):
@@ -84,7 +85,7 @@ def create_wave(tonal, nagval, x, y, way):
 	# y
 	# направление 1 - вверх, 7 - вниз, 3 - налево, 5 - направо
 	# столкновение 0 - движение, 1 - столкновение
-	# количество столкновений
+	# количество прожитых тиков(или столкновений - в зависимости куда поставить +1)
 
 def leftclick(event):
 	global tonal, frames, nagval, STEP, multiverse_nagval, multiverse_tonal
