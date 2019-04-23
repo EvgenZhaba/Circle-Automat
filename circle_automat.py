@@ -78,7 +78,13 @@ def create_wave(tonal, nagval, x, y, way):
 	if dx == 0:
 		tonal[x][y+1] = 2
 		tonal[x][y-1] = 2
+
 	nagval += [ [x, y, way, 0, 0] ]
+	# x
+	# y
+	# направление 1 - вверх, 7 - вниз, 3 - налево, 5 - направо
+	# столкновение 0 - движение, 1 - столкновение
+	# количество столкновений
 
 def leftclick(event):
 	global tonal, frames, nagval, STEP, multiverse_nagval, multiverse_tonal
@@ -128,19 +134,8 @@ frames = []
 tonal = [[0 for i in range(WX)] for i in range(WY)]
 multiverse_tonal = [tonal]
 
-#tonal[WX*8//16+1][WY//2] = 2
-#tonal[WX*8//16-1][WY//2] = 2
-#tonal[WX*7//16+1][WY//2] = 2
-#tonal[WX*7//16-1][WY//2] = 2
-
-#[WX*7//16, WY//2, 3, 0, 0]
-nagval = [ ] # 1 - вверх, 7 - вниз, 3 - налево, 5 - направо; 0 - движение, 1 - столкновение;
+nagval = [ ] 
 multiverse_nagval = [nagval]
-# x
-# y
-# направление
-# столкновение
-# количество столкновений
 
 STEP = 0
 #create_wave(tonal, nagval, WX*8//16, WY*8//16, 5)
